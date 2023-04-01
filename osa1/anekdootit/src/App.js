@@ -13,7 +13,8 @@ const App = () => {
   ]
    
   const [selected, setSelected] = useState(0)
-  
+  const [points, setPoints] = useState(new Array(8).fill(0))
+
   const handleNextAnecdote = () => {
     if (selected === anecdotes.length - 1) {
       setSelected(0)
@@ -22,9 +23,17 @@ const App = () => {
     }
   }
 
+  const handleVote = () => {
+    const copy = [...points]
+    copy[selected] += 1
+    setPoints(copy)
+  }
+
   return (
     <div>
       <p>{anecdotes[selected]}</p>
+      <p>has {points[selected]} votes</p>
+      <button onClick= {() => handleVote()}>vote</button>
       <button onClick={() => handleNextAnecdote()}>next anecdote</button>
     </div>
   )
