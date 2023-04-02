@@ -1,6 +1,3 @@
-
-
-
 const Part = ({ part }) => {
     return (
         <p>{part.name} {part.exercises}</p>
@@ -29,6 +26,7 @@ const Header = ({ header }) => {
     )
 }
 
+
 const Course = ({ course }) => {
     return (
         <div>
@@ -37,5 +35,6 @@ const Course = ({ course }) => {
         </div>
     )
 }
+
 
 export default Course
