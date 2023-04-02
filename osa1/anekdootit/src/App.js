@@ -17,11 +17,9 @@ const App = () => {
   const [mostPoints, setMostPoints] = useState(0)
 
   const handleNextAnecdote = () => {
-    if (selected === anecdotes.length - 1) {
-      setSelected(0)
-    } else {
-      setSelected(selected + 1)
-    }
+    let random = Math.floor(Math.random() * 8)
+    console.log(random) 
+    setSelected(random)
   }
 
   const handleVote = () => {
