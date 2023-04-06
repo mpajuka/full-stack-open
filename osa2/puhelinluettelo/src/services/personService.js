@@ -13,9 +13,7 @@ const create = newObject => {
 
 const deleteContact = (person) => {
     const deleteRequest = axios.delete(`${baseUrl}/${person.id}`)
-    return deleteRequest
-            .then(response => response.data)
-            .catch(error => console.log(error))
+    return deleteRequest .then(response => response.data)
 }
 
 const changeNumber = (person) => {

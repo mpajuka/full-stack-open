@@ -13,7 +13,7 @@ const App = () => {
   const [addMessage, setAddMessage] = useState(null)
   const [removeMessage, setRemoveMessage] = useState(null)
   const [numberMessage, setNumberMessage] = useState(null)
-
+  const [alreadyRemovedMessage, setAlreadyRemovedMessage] = useState(null)
 
   useEffect(() => {
     personService
@@ -32,8 +32,10 @@ const App = () => {
     }
     const personInContacts = persons.find(person => person.name === newName)
 
+    // if contact is already added to phonebook
     if (personInContacts) {
       if (window.confirm(`${newName} is already added to phonebook\nDo you want to update the old number with the new one?`)) {
+        // changing number of existing contact
         const personWithUpdatedNumber = {...personInContacts, number: newNumber} 
         personService
           .changeNumber(personWithUpdatedNumber)
@@ -45,6 +47,15 @@ const App = () => {
             setTimeout(() => {
               setNumberMessage(null)
             }, 5000)
+          })
+          .catch(error => {
+            setAlreadyRemovedMessage(
+              `Information of ${personWithUpdatedNumber.name} has already been removed from server`
+            )
+            setPersons(persons.filter(p => p.id !== personWithUpdatedNumber.id))
+            setTimeout(() => {
+              setAlreadyRemovedMessage(null)
+            }, 5000) 
           })
           
           setNewName('')
@@ -64,7 +75,6 @@ const App = () => {
           setNewName('')
           setNewNumber('')
         })
-      
     }
   }
 
@@ -74,12 +84,25 @@ const App = () => {
       if (window.confirm(`Delete ${deletedContact.name}`)) {
         personService
           .deleteContact(person)
-          setRemoveMessage(
-            `Removed ${person.name}`
-          )
-          setTimeout(() => {
-            setRemoveMessage(null)
-          }, 5000)
+          .then(response => {
+            setRemoveMessage(
+              `Removed ${person.name}`
+            )
+            setTimeout(() => {
+              setRemoveMessage(null)
+            }, 5000)
+          })
+          .catch(error => {
+            setAlreadyRemovedMessage(
+              `Information of ${person.name} has already been removed from server`
+            )
+            setPersons(persons.filter(p => p.id !== person.id))
+            setTimeout(() => {
+              setAlreadyRemovedMessage(null)
+            }, 5000)
+            
+          })
+          
           setPersons(persons.filter(p => p.id !== deletedContact.id))
       }
   }
@@ -103,9 +126,10 @@ const App = () => {
   return (
     <div>
       <h2>Phonebook</h2>
-      <Notification message={addMessage} />
-      <Notification message={removeMessage} />
-      <Notification message={numberMessage} />
+      <Notification message={addMessage} type='success' />
+      <Notification message={removeMessage} type='success' />
+      <Notification message={numberMessage} type='success' />
+      <Notification message={alreadyRemovedMessage} type='error'/>
 
       <Filter filter={nameFilter} eventHandler={handleNewFilter} />
 
