@@ -18,4 +18,9 @@ const deleteContact = (person) => {
             .catch(error => console.log(error))
 }
 
-export default { getAll, create, deleteContact }
+const changeNumber = (person) => {
+    const changeRequest = axios.put(`${baseUrl}/${person.id}`, person)
+    return changeRequest.then(response => response.data)
+}
+
+export default { getAll, create, deleteContact, changeNumber }
