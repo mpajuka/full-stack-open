@@ -3,13 +3,16 @@ import Filter from './components/Filter'
 import PersonForm from './components/PersonForm'
 import Persons from './components/Persons'
 import personService from './services/personService'
-
+import Notification from './components/Notification'
 
 const App = () => {
   const [persons, setPersons] = useState([]) 
   const [newName, setNewName] = useState('')
   const [newNumber, setNewNumber] = useState('')
   const [nameFilter, setNameFilter] = useState('')
+  const [addMessage, setAddMessage] = useState(null)
+  const [removeMessage, setRemoveMessage] = useState(null)
+  const [numberMessage, setNumberMessage] = useState(null)
 
 
   useEffect(() => {
@@ -34,9 +37,16 @@ const App = () => {
         const personWithUpdatedNumber = {...personInContacts, number: newNumber} 
         personService
           .changeNumber(personWithUpdatedNumber)
-          .then(response => {
-            setPersons(persons.map(p => p.id === personWithUpdatedNumber.id ? response : p))
+          .then(changedPerson => {
+            setPersons(persons.map(p => p.id === personWithUpdatedNumber.id ? changedPerson : p))
+            setNumberMessage(
+              `Changed ${changedPerson.name}'s number`
+            )
+            setTimeout(() => {
+              setNumberMessage(null)
+            }, 5000)
           })
+          
           setNewName('')
           setNewNumber('')
       }
@@ -45,6 +55,12 @@ const App = () => {
         .create(contactObject)
         .then(returnedPerson => {
           setPersons(persons.concat(returnedPerson))
+          setAddMessage(
+            `Added ${returnedPerson.name}`
+          )
+          setTimeout(() => {
+            setAddMessage(null)
+          }, 5000)
           setNewName('')
           setNewNumber('')
         })
@@ -58,6 +74,12 @@ const App = () => {
       if (window.confirm(`Delete ${deletedContact.name}`)) {
         personService
           .deleteContact(person)
+          setRemoveMessage(
+            `Removed ${person.name}`
+          )
+          setTimeout(() => {
+            setRemoveMessage(null)
+          }, 5000)
           setPersons(persons.filter(p => p.id !== deletedContact.id))
       }
   }
@@ -81,6 +103,9 @@ const App = () => {
   return (
     <div>
       <h2>Phonebook</h2>
+      <Notification message={addMessage} />
+      <Notification message={removeMessage} />
+      <Notification message={numberMessage} />
 
       <Filter filter={nameFilter} eventHandler={handleNewFilter} />
 
