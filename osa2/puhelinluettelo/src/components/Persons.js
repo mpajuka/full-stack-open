@@ -1,12 +1,15 @@
-const Persons = ({ persons, nameFilter }) => {
+const Persons = ({ persons, nameFilter, handleDeleteContact }) => {
     return (
       <div>
         {persons.filter(p =>
             p.name.toLowerCase().includes(nameFilter.toLowerCase())
             ).map(person =>
-            <p key={person.name}>
-                {person.name} {person.number}
-            </p>
+              <div key={person.name}>
+                <p>
+                  {person.name} {person.number}
+                  <button id={person.name} onClick={() => handleDeleteContact(person)}>delete</button>
+                </p>
+              </div>
         )}
       </div>
     )
