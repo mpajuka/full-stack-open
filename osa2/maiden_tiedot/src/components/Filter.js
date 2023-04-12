@@ -1,7 +1,7 @@
 const Filter = (props) => {
     return (
       <div>
-        find countries<input value={props.filter} onChange={props.eventHandler}/>
+        find countries&nbsp;<input value={props.filter} onChange={props.eventHandler}/>
       </div> 
     )
 }
