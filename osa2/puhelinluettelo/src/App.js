@@ -72,9 +72,15 @@ const App = () => {
           setTimeout(() => {
             setAddMessage(null)
           }, 5000)
-          setNewName('')
-          setNewNumber('')
         })
+        .catch(error => {
+          setAlreadyRemovedMessage(error.response.data.error)
+          setTimeout(() => {
+            setAlreadyRemovedMessage(null)
+          }, 5000)
+        })
+        setNewName('')
+        setNewNumber('')
     }
   }
 
