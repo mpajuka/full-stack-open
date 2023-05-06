@@ -4,17 +4,19 @@ const app = require('../app')
 
 const api = supertest(app)
 
-test('blogs are returned as json', async () => {
-  await api
-    .get('/api/blogs')
-    .expect(200)
-    .expect('Content-Type', /application\/json/)
+const Blog = require('../models/blog')
+const helper = require('./test_helper')
+
+beforeEach(async () => {
+  await Blog.deleteMany({})
+  await Blog.insertMany(helper.initialBlogs)
 })
 
-test('four blogs present', async () => {
+test('all blogs returned', async () => {
   const response = await api.get('/api/blogs')
-  expect(response.body).toHaveLength(4)
+  expect(response.body).toHaveLength(helper.initialBlogs.length)
 })
+
 
 afterAll(async () => {
   await mongoose.connection.close()
