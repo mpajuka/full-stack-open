@@ -47,7 +47,26 @@ test('blog correctly added to database', async () => {
   expect(url).toContain('example.com')
   const likes = blogsAtEnd.map(b => b.likes)
   expect(likes).toContain(5)
+})
 
+test('blog without likes determined sets it to zero', async () => {
+  const blogWithoutLikes = {
+    title: 'Blog-without-likes',
+    author: 'John Doe',
+    url: 'example.com',
+  }
+
+  await api
+    .post('/api/blogs')
+    .send(blogWithoutLikes)
+    .expect(201)
+    .expect('Content-Type', /application\/json/)
+
+  const blogsAtEnd = await helper.blogsInDB()
+  expect(blogsAtEnd).toHaveLength(helper.initialBlogs.length + 1)
+
+  const zeroLikes = blogsAtEnd.map(b => b.likes)
+  expect(zeroLikes).toContain(0)
 })
 
 
