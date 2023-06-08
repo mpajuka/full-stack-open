@@ -68,6 +68,32 @@ test('blog without likes determined sets it to zero', async () => {
   const zeroLikes = blogsAtEnd.map(b => b.likes)
   expect(zeroLikes).toContain(0)
 })
+describe('Bad request', () => {
+  test('if blog does not contain title', async () => {
+    const blogWithoutTitle = {
+      author: 'John Doe',
+      url: 'example.com'
+    }
+
+    await api
+      .post('/api/blogs')
+      .send(blogWithoutTitle)
+      .expect(400)
+  })
+
+  test('if blog does not contain url', async () => {
+    const blogWithoutUrl = {
+      title: 'Blog without url',
+      author: 'John Doe'
+    }
+
+    await api
+      .post('/api/blogs')
+      .send(blogWithoutUrl)
+      .expect(400)
+  })
+})
+
 
 
 afterAll(async () => {
