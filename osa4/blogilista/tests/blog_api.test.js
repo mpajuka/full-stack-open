@@ -109,6 +109,22 @@ test('blog deleted based on id succeeds if id is valid', async () => {
   expect(blogsAtEnd).not.toContain(blogToDelete)
 })
 
+test('successful like modification of single blog', async () => {
+  const blogsAtStart = await helper.blogsInDB()
+  const blogToEdit = blogsAtStart[0]
+
+  const blogWithNewLikes = { ...blogToEdit, likes: 75211 }
+
+  await api
+    .put(`/api/blogs/${blogToEdit.id}`)
+    .send(blogWithNewLikes)
+    .expect(200)
+    .expect('Content-Type', /application\/json/)
+
+  const blogsAtEnd = await helper.blogsInDB()
+  const likes = blogsAtEnd.map(b => b.likes)
+  expect(likes).toContainEqual(75211)
+})
 
 afterAll(async () => {
   await mongoose.connection.close()
