@@ -137,6 +137,27 @@ describe('User', () => {
 
     await user.save()
   })
+
+  test('creation fails with username already in use', async () => {
+    const usersAtStart = await helper.usersInDb()
+
+    const newUser = {
+      username: 'root',
+      password: 'password'
+    }
+
+    const result = await api
+      .post('/api/users')
+      .send(newUser)
+      .expect(400)
+      .expect('Content-Type', /application\/json/)
+
+    expect(result.body.error).toContain('expected `username` to be unique')
+
+    const usersAtEnd = await helper.usersInDb()
+    expect(usersAtEnd).toHaveLength(usersAtStart.length)
+  })
+
   test('with valid content is created ', async () => {
     const usersAtStart = await helper.usersInDb()
 
