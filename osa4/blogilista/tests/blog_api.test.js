@@ -1,10 +1,12 @@
 const mongoose = require('mongoose')
 const supertest = require('supertest')
 const app = require('../app')
+const bcrypt = require('bcrypt')
 
 const api = supertest(app)
 
 const Blog = require('../models/blog')
+const User = require('../models/user')
 const helper = require('./test_helper')
 
 beforeEach(async () => {
@@ -124,6 +126,108 @@ test('successful like modification of single blog', async () => {
   const blogsAtEnd = await helper.blogsInDB()
   const likes = blogsAtEnd.map(b => b.likes)
   expect(likes).toContainEqual(75211)
+})
+
+describe('User', () => {
+  beforeEach(async () => {
+    await User.deleteMany({})
+
+    const passwordHash = await bcrypt.hash('password', 10)
+    const user = new User({ username: 'root', passwordHash })
+
+    await user.save()
+  })
+  test('with valid content is created ', async () => {
+    const usersAtStart = await helper.usersInDb()
+
+    const validUser = {
+      username: 'jdoe',
+      name: 'John Doe',
+      password: 'doespassword'
+    }
+
+    await api
+      .post('/api/users')
+      .send(validUser)
+      .expect(201)
+      .expect('Content-Type', /application\/json/)
+
+    const usersAtEnd = await helper.usersInDb()
+    expect(usersAtEnd).toHaveLength(usersAtStart.length + 1)
+    const usernames = usersAtEnd.map(u => u.username)
+    expect(usernames).toContain(validUser.username)
+  })
+
+  test('missing password raises an error', async () => {
+    const usersAtStart = await helper.usersInDb()
+
+    const missingPassword = {
+      username: 'jdoe',
+      name: 'John Doe'
+    }
+
+    await api
+      .post('/api/users')
+      .send(missingPassword)
+      .expect(400)
+
+    const usersAtEnd = await helper.usersInDb()
+    expect(usersAtEnd).toHaveLength(usersAtStart.length)
+  })
+
+  test('with less than 3 characters in their password raises an error', async () => {
+    const usersAtStart = await helper.usersInDb()
+
+    const invalidPassword = {
+      username: 'jdoe',
+      name: 'John Doe',
+      password: 'do'
+    }
+
+    await api
+      .post('/api/users')
+      .send(invalidPassword)
+      .expect(400)
+
+    const usersAtEnd = await helper.usersInDb()
+    expect(usersAtEnd).toHaveLength(usersAtStart.length)
+  })
+
+  test('missing username raises an error', async () => {
+    const usersAtStart = await helper.usersInDb()
+
+    const missingUsername = {
+      name: 'John Doe',
+      password: 'doespassword'
+    }
+
+    await api
+      .post('/api/users')
+      .send(missingUsername)
+      .expect(400)
+
+    const usersAtEnd = await helper.usersInDb()
+    expect(usersAtEnd).toHaveLength(usersAtStart.length)
+  })
+
+  test('with less than 3 characters in their username raises an error', async () => {
+    const usersAtStart = await helper.usersInDb()
+
+    const invalidUsername = {
+      username: 'jd',
+      name: 'John Doe',
+      password: 'doespassword'
+    }
+
+    await api
+      .post('/api/users')
+      .send(invalidUsername)
+      .expect(400)
+
+    const usersAtEnd = await helper.usersInDb()
+    expect(usersAtEnd).toHaveLength(usersAtStart.length)
+  })
+
 })
 
 afterAll(async () => {
