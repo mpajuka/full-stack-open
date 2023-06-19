@@ -1,7 +1,6 @@
 const mongoose = require('mongoose')
 const supertest = require('supertest')
 const app = require('../app')
-const bcrypt = require('bcrypt')
 
 const api = supertest(app)
 
@@ -9,9 +8,32 @@ const Blog = require('../models/blog')
 const User = require('../models/user')
 const helper = require('./test_helper')
 
+let userToken = ''
+
 beforeEach(async () => {
+  await User.deleteMany({})
   await Blog.deleteMany({})
-  await Blog.insertMany(helper.initialBlogs)
+
+  const user = { username: 'root', password: 'password' }
+  await api
+    .post('/api/users')
+    .send(user)
+
+  const userLogin = await api
+    .post('/api/login')
+    .send(user)
+  userToken = userLogin.body.token
+
+  await api
+    .post('/api/blogs')
+    .send(helper.initialBlogs[0])
+    .set({ Authorization: `Bearer ${userToken}` })
+    .expect(201)
+  await api
+    .post('/api/blogs')
+    .send(helper.initialBlogs[1])
+    .set({ Authorization: `Bearer ${userToken}` })
+    .expect(201)
 })
 
 test('all blogs returned', async () => {
@@ -35,6 +57,7 @@ test('blog correctly added to database', async () => {
   await api
     .post('/api/blogs')
     .send(newBlog)
+    .set({ Authorization: `Bearer ${userToken}` })
     .expect(201)
     .expect('Content-Type', /application\/json/)
 
@@ -61,6 +84,7 @@ test('blog without likes determined sets it to zero', async () => {
   await api
     .post('/api/blogs')
     .send(blogWithoutLikes)
+    .set({ Authorization: `Bearer ${userToken}` })
     .expect(201)
     .expect('Content-Type', /application\/json/)
 
@@ -80,6 +104,7 @@ describe('Bad request', () => {
     await api
       .post('/api/blogs')
       .send(blogWithoutTitle)
+      .set({ Authorization: `Bearer ${userToken}` })
       .expect(400)
   })
 
@@ -92,6 +117,7 @@ describe('Bad request', () => {
     await api
       .post('/api/blogs')
       .send(blogWithoutUrl)
+      .set({ Authorization: `Bearer ${userToken}` })
       .expect(400)
   })
 })
@@ -102,6 +128,7 @@ test('blog deleted based on id succeeds if id is valid', async () => {
 
   await api
     .delete(`/api/blogs/${blogToDelete.id}`)
+    .set({ Authorization: `Bearer ${userToken}` })
     .expect(204)
 
   const blogsAtEnd = await helper.blogsInDB()
@@ -129,15 +156,6 @@ test('successful like modification of single blog', async () => {
 })
 
 describe('User', () => {
-  beforeEach(async () => {
-    await User.deleteMany({})
-
-    const passwordHash = await bcrypt.hash('password', 10)
-    const user = new User({ username: 'root', passwordHash })
-
-    await user.save()
-  })
-
   test('creation fails with username already in use', async () => {
     const usersAtStart = await helper.usersInDb()
 
