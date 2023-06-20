@@ -91,7 +91,20 @@ const App = () => {
         setErrormessage(null)
       }, 5000)
     }
-    
+  }
+
+  const handleLike = async (blog) => {
+    const likedBlog = {
+      title: blog.title,
+      author: blog.author,
+      url: blog.url,
+      likes: blog.likes + 1,
+      user: blog.user.id
+    }
+    await blogService.update(blog.id, likedBlog)
+    const getUpdated = await blogService.getAll()
+    setBlogs(getUpdated)
+
   }
 
   const loginForm = () => (
@@ -139,7 +152,10 @@ const App = () => {
       </Togglable>
       <div> 
         {blogs.map(blog =>
-        <Blog key={blog.id} blog={blog} />
+        <Blog 
+          key={blog.id} 
+          blog={blog}
+          incrementLike={() => handleLike(blog)} />
         )}
       </div>
     </div>
