@@ -15,7 +15,7 @@ const App = () => {
   const [author, setAuthor] = useState('')
   const [url, setUrl] = useState('')
   const [errorMessage, setErrormessage] = useState(null)
-  const [blogAddMessage, setBlogAddMessage] = useState(null)
+  const [successMessage, setSuccessMessage] = useState(null)
 
   useEffect(() => {
     const fetchBlogs = async () => {
@@ -73,13 +73,13 @@ const App = () => {
         url: url
       })
       setBlogs(blogs.concat(newBlog))
-      setBlogAddMessage(`a new blog ${title} by ${author} added`)
+      setSuccessMessage(`a new blog ${title} by ${author} added`)
 
       const getBlogs = await blogService.getAll()
       setBlogs(getBlogs)
 
       setTimeout(() => {
-        setBlogAddMessage(null)
+        setSuccessMessage(null)
       }, 5000)
       setAuthor('')
       setUrl('')
@@ -104,7 +104,26 @@ const App = () => {
     await blogService.update(blog.id, likedBlog)
     const getUpdated = await blogService.getAll()
     setBlogs(getUpdated)
+  }
 
+  const handleRemove = async (blog) => {
+    if (window.confirm(`Remove blog ${blog.title} by ${blog.author}`)) {
+      try {
+        await blogService.removeBlog(blog.id)
+        const getUpdated = await blogService.getAll()
+        setBlogs(getUpdated)
+        setSuccessMessage(`Successfully removed ${blog.title} by ${blog.author}`)
+        setTimeout(() => {
+          setSuccessMessage(null)
+        }, 5000)
+      } catch(exception) {
+        setErrormessage('unable to delete blog')
+        setTimeout(() => {
+          setErrormessage(null)
+        }, 5000)
+      }
+      
+    }
   }
 
   const loginForm = () => (
@@ -133,7 +152,7 @@ const App = () => {
     <div>
       <h2>Blogs</h2>
       <Notification message={errorMessage} type='error' />
-      <Notification message={blogAddMessage} type='success' />
+      <Notification message={successMessage} type='success' />
       <p>{user.name} logged in&nbsp;
         <button onClick={handleLogout}>
           log out
@@ -156,7 +175,10 @@ const App = () => {
         <Blog 
           key={blog.id} 
           blog={blog}
-          incrementLike={() => handleLike(blog)} />
+          incrementLike={() => handleLike(blog)}
+          removeBlog={() => handleRemove(blog)}
+          loggedUser={user}
+        />
         )}
       </div>
     </div>

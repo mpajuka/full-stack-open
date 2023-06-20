@@ -1,6 +1,6 @@
 import { useState } from "react"
 
-const Blog = ({blog, incrementLike}) => {
+const Blog = ({blog, incrementLike, removeBlog, loggedUser}) => {
   const blogStyle = {
     marginTop: 10,
     paddingTop: 5,
@@ -22,6 +22,7 @@ const Blog = ({blog, incrementLike}) => {
           <br></br><a href={blog.url} target="noreferrer noopener">{blog.url}</a>
           <br></br>likes {blog.likes} <button onClick={incrementLike}>like</button>
           <br></br>{blog.user.name}
+          <br></br>{loggedUser.name === blog.user.name && <button onClick={removeBlog}>remove</button>}
       </div>
     )
   } else {
