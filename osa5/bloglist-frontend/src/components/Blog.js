@@ -12,7 +12,7 @@ const Blog = ({blog}) => {
   }
   const [blogVisible, setBlogVisible] = useState(false)
 
-  const toggleBlogVisible = (event) => {
+  const toggleBlogVisible = () => {
     setBlogVisible(!blogVisible)
   }
   if (blogVisible === true) {

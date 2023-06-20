@@ -18,9 +18,11 @@ const App = () => {
   const [blogAddMessage, setBlogAddMessage] = useState(null)
 
   useEffect(() => {
-    blogService.getAll().then(blogs =>
-      setBlogs( blogs )
-    )  
+    const fetchBlogs = async () => {
+      const blogs = await blogService.getAll()
+      setBlogs(blogs)
+    }
+    fetchBlogs()
   }, [])
 
   useEffect(() => {
@@ -72,12 +74,17 @@ const App = () => {
       })
       setBlogs(blogs.concat(newBlog))
       setBlogAddMessage(`a new blog ${title} by ${author} added`)
+
+      const getBlogs = await blogService.getAll()
+      setBlogs(getBlogs)
+
       setTimeout(() => {
         setBlogAddMessage(null)
       }, 5000)
       setAuthor('')
       setUrl('')
       setTitle('')
+
     } catch (exception) {
       setErrormessage('Unable to add blog, missing fields')
       setTimeout(() => {
