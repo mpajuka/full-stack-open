@@ -3,6 +3,8 @@ import Blog from './components/Blog'
 import blogService from './services/blogs'
 import loginService from './services/login'
 import Notification from './components/Notification'
+import Togglable from './components/Togglable'
+import BlogForm from './components/BlogForm'
 
 const App = () => {
   const [blogs, setBlogs] = useState([])
@@ -117,27 +119,17 @@ const App = () => {
           log out
         </button>
       </p>
-      <h2>Create new</h2>
-      <form onSubmit={handleCreate}>
-        <div>
-          title&nbsp;
-          <input type='text' value={title} name='Title'
-            onChange={({ target }) => setTitle(target.value)}/>
-        </div>
-        <div>
-          author&nbsp;
-          <input type='text' value={author} name='Author'
-            onChange={({ target }) => setAuthor(target.value)}/>
-        </div> 
-        <div>
-          url&nbsp;
-          <input type='text' value={url} name='Url'
-            onChange={({ target }) => setUrl(target.value)}/>
-        </div>
-        <p>
-          <button type='submit'>create</button>
-        </p>
-      </form>
+      <Togglable buttonLabel='create a new blog'>
+        <BlogForm
+          title={title}
+          author={author}
+          url={url}
+          handleTitleChange={({ target }) => setTitle(target.value)}
+          handleAuthorChange={({ target }) => setAuthor(target.value)}
+          handleUrlChange={({ target }) => setUrl(target.value)}
+          handleSubmit={handleCreate}
+        />
+      </Togglable> 
       <ul>
         {blogs.map(blog =>
           <Blog key={blog.id} blog={blog} />
