@@ -51,7 +51,7 @@ const App = () => {
       setUsername('')
       setPassword('')
     } catch (exception) {
-      setErrormessage('wrong username or password') 
+      setErrormessage('wrong username or password')
       setTimeout(() => {
         setErrormessage(null)
       }, 5000)
@@ -122,7 +122,6 @@ const App = () => {
           setErrormessage(null)
         }, 5000)
       }
-      
     }
   }
 
@@ -130,22 +129,22 @@ const App = () => {
     <div>
       <h2>Log in to application</h2>
       <Notification message={errorMessage} type='error' />
-        <form onSubmit={handleLogin}>
-          <div>
-            username&nbsp;
-              <input type='text' value={username} name='Username' 
-                onChange={({ target }) => setUsername(target.value)}/>
-          </div>
-          <div>
+      <form onSubmit={handleLogin}>
+        <div>
+          username&nbsp;
+          <input type='text' value={username} name='Username'
+            onChange={({ target }) => setUsername(target.value)}/>
+        </div>
+        <div>
             password&nbsp;
-              <input type='password' value={password} name='Password'
-                onChange={({ target }) => setPassword(target.value)}/>
-          </div>
-          <p>
-            <button type='submit'>login</button>
-          </p>
+          <input type='password' value={password} name='Password'
+            onChange={({ target }) => setPassword(target.value)}/>
+        </div>
+        <p>
+          <button type='submit'>login</button>
+        </p>
       </form>
-    </div> 
+    </div>
   )
 
   const blogView = () => (
@@ -169,16 +168,15 @@ const App = () => {
           handleSubmit={handleCreate}
         />
       </Togglable>
-      <div> 
-        
+      <div>
         {blogs.sort((a, b) => b.likes - a.likes).map(blog =>
-        <Blog 
-          key={blog.id} 
-          blog={blog}
-          incrementLike={() => handleLike(blog)}
-          removeBlog={() => handleRemove(blog)}
-          loggedUser={user}
-        />
+          <Blog
+            key={blog.id}
+            blog={blog}
+            incrementLike={() => handleLike(blog)}
+            removeBlog={() => handleRemove(blog)}
+            loggedUser={user}
+          />
         )}
       </div>
     </div>

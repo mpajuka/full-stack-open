@@ -23,7 +23,7 @@ const create = async newObject => {
 
 const update = async (id, newObject) => {
   const updateLikes = await axios.put(`${ baseUrl}/${id}`, newObject)
-  return updateLikes.data 
+  return updateLikes.data
 }
 
 const removeBlog = async id => {
@@ -35,5 +35,4 @@ const removeBlog = async id => {
   return deleteBlog.data
 }
 
-// eslint-disable-next-line import/no-anonymous-default-export
 export default { getAll, setToken, create, update, removeBlog }

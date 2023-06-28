@@ -1,6 +1,6 @@
-import { useState } from "react"
+import { useState } from 'react'
 
-const Blog = ({blog, incrementLike, removeBlog, loggedUser}) => {
+const Blog = ({ blog, incrementLike, removeBlog, loggedUser }) => {
   const blogStyle = {
     marginTop: 10,
     paddingTop: 5,
@@ -18,11 +18,11 @@ const Blog = ({blog, incrementLike, removeBlog, loggedUser}) => {
   if (blogVisible === true) {
     return(
       <div style={blogStyle}>
-          {blog.title}&nbsp;{blog.author}&nbsp;<button onClick={toggleBlogVisible}>hide</button>
-          <br></br><a href={blog.url} target="noreferrer noopener">{blog.url}</a>
-          <br></br>likes {blog.likes} <button onClick={incrementLike}>like</button>
-          <br></br>{blog.user.name}
-          <br></br>{loggedUser.name === blog.user.name && <button onClick={removeBlog}>remove</button>}
+        {blog.title}&nbsp;{blog.author}&nbsp;<button onClick={toggleBlogVisible}>hide</button>
+        <br></br><a href={blog.url} target="noreferrer noopener">{blog.url}</a>
+        <br></br>likes {blog.likes} <button onClick={incrementLike}>like</button>
+        <br></br>{blog.user.name}
+        <br></br>{loggedUser.name === blog.user.name && <button onClick={removeBlog}>remove</button>}
       </div>
     )
   } else {
