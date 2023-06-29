@@ -16,15 +16,26 @@ const Blog = ({ blog, incrementLike, removeBlog, loggedUser }) => {
     setBlogVisible(!blogVisible)
   }
   if (blogVisible === true) {
-    return(
-      <div style={blogStyle}>
-        {blog.title}&nbsp;{blog.author}&nbsp;<button onClick={toggleBlogVisible}>hide</button>
-        <br></br><a href={blog.url} target="noreferrer noopener">{blog.url}</a>
-        <br></br>likes {blog.likes} <button onClick={incrementLike}>like</button>
-        <br></br>{blog.user.name}
-        <br></br>{loggedUser.name === blog.user.name && <button onClick={removeBlog}>remove</button>}
-      </div>
-    )
+    if (loggedUser === undefined) {
+      return(
+        <div style={blogStyle}>
+          {blog.title}&nbsp;{blog.author}&nbsp;<button onClick={toggleBlogVisible}>hide</button>
+          <br></br><a href={blog.url} target="noreferrer noopener">{blog.url}</a>
+          <br></br>likes {blog.likes} <button onClick={incrementLike}>like</button>
+          <br></br>{blog.user.name}
+        </div>
+      )
+    } else {
+      return(
+        <div style={blogStyle}>
+          {blog.title}&nbsp;{blog.author}&nbsp;<button onClick={toggleBlogVisible}>hide</button>
+          <br></br><a href={blog.url} target="noreferrer noopener">{blog.url}</a>
+          <br></br>likes {blog.likes} <button onClick={incrementLike}>like</button>
+          <br></br>{blog.user.name}
+          <br></br>{loggedUser.name === blog.user.name && <button onClick={removeBlog}>remove</button>}
+        </div>
+      )
+    }
   } else {
     return(
       <div style={blogStyle}>
