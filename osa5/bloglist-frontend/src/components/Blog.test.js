@@ -36,3 +36,28 @@ test('all blog content rendered after "view" clicked', async () => {
   expect(container).toHaveTextContent('This name should be rendered')
   expect(container).toHaveTextContent('likes 0')
 })
+
+test('likes called twice', async () => {
+  const blog = {
+    title: 'This title should be rendered',
+    author: 'This author should be rendered',
+    url: 'This url should be rendered',
+    user: {
+      name: 'This name should be rendered'
+    },
+    likes: 0
+  }
+
+  const mockHandler = jest.fn()
+
+  render(<Blog blog={blog} incrementLike={mockHandler} />)
+
+  const user = userEvent.setup()
+  const viewButton = screen.getByText('view')
+  await user.click(viewButton)
+
+  const likeButton = screen.getByText('like')
+  await user.dblClick(likeButton)
+
+  expect(mockHandler.mock.calls).toHaveLength(2)
+})
