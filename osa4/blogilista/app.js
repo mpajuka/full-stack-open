@@ -27,6 +27,10 @@ app.use(middleware.tokenExtractor)
 app.use('/api/blogs', blogsRouter)
 app.use('/api/users', usersRouter)
 app.use('/api/login', loginRouter)
+if (process.env.NODE_ENV === 'test') {
+  const cypressRouter = require('./controllers/cypress')
+  app.use('/api/testing', cypressRouter)
+}
 app.use(middleware.errorHandler)
 
 module.exports = app
