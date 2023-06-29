@@ -14,17 +14,17 @@ const BlogForm = ({
     <form onSubmit={handleSubmit}>
       <div>
           title&nbsp;
-        <input type='text' value={title} name='Title'
+        <input type='text' value={title} name='Title' id='title'
           onChange={handleTitleChange}/>
       </div>
       <div>
           author&nbsp;
-        <input type='text' value={author} name='Author'
+        <input type='text' value={author} name='Author' id='author'
           onChange={handleAuthorChange}/>
       </div>
       <div>
           url&nbsp;
-        <input type='text' value={url} name='Url'
+        <input type='text' value={url} name='Url' id='url'
           onChange={handleUrlChange}/>
       </div>
       <p>
@@ -35,12 +35,6 @@ const BlogForm = ({
 )
 
 BlogForm.propTypes = {
-  title: PropTypes.string.isRequired,
-  author: PropTypes.string.isRequired,
-  url: PropTypes.string.isRequired,
-  handleTitleChange: PropTypes.func.isRequired,
-  handleAuthorChange: PropTypes.func.isRequired,
-  handleUrlChange: PropTypes.func.isRequired,
   handleSubmit: PropTypes.func.isRequired
 }
 
