@@ -94,5 +94,31 @@ describe('Blog app', function() {
       cy.get('button').contains('view').click()
       cy.get('button').contains('remove').should('not.exist')
     })
+
+    it('Blogs are sorted with most likes first', function() {
+      cy.contains('create a new blog').click()
+      cy.contains('title').find('input').type('Most likes')
+      cy.contains('author').find('input').type('most-liked')
+      cy.contains('url').find('input').type('most-liked-url')
+      cy.get('form').contains('create').click()
+      cy.get('button').contains('view').click()
+      cy.get('button').contains('like').click()
+      cy.contains('likes 1')
+
+      cy.contains('title').find('input').type('Second most likes')
+      cy.contains('author').find('input').type('second-most-liked')
+      cy.contains('url').find('input').type('second-most-liked-url')
+      cy.get('form').contains('create').click()
+
+      cy.get('div').eq(0).contains('view').click()
+      cy.get('button').contains('hide').first().click()
+      cy.get('button').contains('like').click()
+      cy.contains('likes 1')
+      cy.get('button').contains('like').click()
+      cy.contains('likes 2')
+
+      cy.get('button').contains('view').click()
+      cy.get('div>div>div>div>div').eq(3).contains('likes 2')
+    })
   })
 })
