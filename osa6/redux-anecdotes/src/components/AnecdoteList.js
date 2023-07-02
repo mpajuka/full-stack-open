@@ -4,9 +4,7 @@ import { notificationSet } from "../reducers/notificationReducer";
 
 const AnecdoteList = () => {
   const anecdotes = useSelector(state => {
-    if (state.filter === 'ALL') {
-      return state.anecdotes
-    }
+    console.log(state )
     return state.anecdotes.filter(a => {
       return a.content.toLowerCase().includes(state.filter.toLowerCase())
     })
