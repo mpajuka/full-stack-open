@@ -1,4 +1,4 @@
-const { ApolloServer } = require('@apollo/server')
+const { ApolloServer, ApolloServerErrorCode } = require('@apollo/server')
 const { startStandaloneServer } = require('@apollo/server/standalone')
 const { v1: uuid } = require('uuid')
 const { GraphQLError } = require('graphql')
@@ -140,7 +140,7 @@ const typeDefs = `
 
     editAuthor(
       name: String!
-      setBornTo: String!
+      setBornTo: Int!
     ): Author
   }
 `
@@ -182,16 +182,27 @@ const resolvers = {
       if (!authorExists) {
         try {
           const author = new Author({ name: args.author })
-          const book = new Book({ ...args, author: { ...author }} )
-          await book.save()
-          author.bookCount = author.bookCount + 1
           await author.save()
-          return book
-        } catch (error) {
-          throw new GraphQLError('Saving book failed', {
+          try {
+            const book = new Book({ ...args, author: { ...author }} )
+            await book.save()
+            author.bookCount = author.bookCount + 1
+            await author.save()
+            return book
+          } catch (error) {
+              throw new GraphQLError('Saving book failed', {
+                extensions: {
+                  code: 'BAD_USER_INPUT',
+                  invalidArgs: args.title,
+                  error
+                }
+              })
+            }
+        } catch(error) {
+          throw new GraphQLError('Creating new author failed', {
             extensions: {
               code: 'BAD_USER_INPUT',
-              invalidArgs: args.name,
+              invalidArgs: args.author,
               error
             }
           })
@@ -209,19 +220,28 @@ const resolvers = {
         throw new GraphQLError('Saving book failed', {
           extensions: {
             code: 'BAD_USER_INPUT',
-            invalidArgs: args.name,
+            invalidArgs: args.title,
             error
           }
         })
       }
       
     },
-    editAuthor: (root, args) => {
-      const author = authors.find(a => a.name === args.name)
-      if (!author) return null
-      const updatedBirthYear = { ...author, born: args.setBornTo }
-      authors = authors.map(a => a.name === args.name ? updatedBirthYear : a)
-      return updatedBirthYear
+    editAuthor: async (root, args) => {
+      try {
+        const findAuthor = await Author.findOne({ name: args.name })
+        findAuthor.born = args.setBornTo
+        findAuthor.save()
+        return findAuthor
+      } catch (error) {
+        throw new GraphQLError('Editing birth year failed', {
+          extensions: {
+            code: 'BAD_USER_INPUT',
+            invalidArgs: args.name,
+            error
+          }
+        })
+      }
     }
   }
 }
