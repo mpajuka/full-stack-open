@@ -29,7 +29,7 @@ const App = () => {
     }, 10000)
   }
 
-  if (!token) {
+  if (!localStorage.getItem('library-user-token')) {
     return (
       <div>
         <div>
@@ -52,6 +52,7 @@ const App = () => {
     setToken(null)
     localStorage.clear()
     client.resetStore()
+    window.location.reload(false)
   }
   return (
     <div>
@@ -61,9 +62,9 @@ const App = () => {
         <button onClick={() => setPage('add')}>add book</button>
         <button onClick={logout}>log out</button>
       </div>
-      <Authors show={page === 'authors'} />
+      <Authors setError={notify} show={page === 'authors'} />
       <Books show={page === 'books'} /> 
-      <NewBook show={page === 'add'} />
+      <NewBook setError={notify} show={page === 'add'} />
       </div>
   )
   

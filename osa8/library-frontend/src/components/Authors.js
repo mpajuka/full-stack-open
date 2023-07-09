@@ -75,8 +75,10 @@ const Authors = (props) => {
         </div>
         <div>
           born
-          <input value={setBornTo}
-            onChange={({ target }) => setSetBornTo(target.value)}>
+          <input 
+            type="number"
+            value={setBornTo}
+            onChange={({ target }) => setSetBornTo(Number(target.value))}>
           </input>
         </div>
         <button type="submit">update author</button>

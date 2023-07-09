@@ -209,20 +209,20 @@ const resolvers = {
           }
         })
       } 
-
       const authorExists = await Author.exists({ name: args.author })
       if (!authorExists) {
         try {
           const author = new Author({ name: args.author })
           await author.save()
           try {
-            const book = new Book({ ...args, author: { ...author }} ).populate('author')
+            const book = new Book({ ...args, author: { ...author }} )
             await book.save()
             author.bookCount = author.bookCount + 1
             await author.save()
             const bookWithAuthors = await Book.findOne({ title: args.title }).populate('author')
             return bookWithAuthors
           } catch (error) {
+              console.log(error)
               throw new GraphQLError('Saving book failed', {
                 extensions: {
                   code: 'BAD_USER_INPUT',
@@ -232,6 +232,7 @@ const resolvers = {
               })
             }
         } catch(error) {
+          console.log(error)
           throw new GraphQLError('Creating new author failed', {
             extensions: {
               code: 'BAD_USER_INPUT',

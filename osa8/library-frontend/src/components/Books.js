@@ -6,8 +6,6 @@ const Books = (props) => {
     pollInterval: 2000
   })
 
-  console.log(result)
-
   if (!props.show) {
     return null
   }
