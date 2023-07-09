@@ -15,9 +15,9 @@ const Login = ({ show, setError, setToken }) => {
     useEffect(() => {
         if (result.data) {
             const token = result.data.login.value
-            console.log('from login', token)
             setToken(token)
             localStorage.setItem('library-user-token', token)
+            window.location.reload(false)
         }
     }, [result.data]) //eslint-disable-line
 
