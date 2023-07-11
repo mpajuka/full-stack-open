@@ -34,4 +34,28 @@ const calculateExercises = (hours: number[], target: number): Result => {
   }
 }
 
-console.log(calculateExercises([3, 0, 2, 4.5, 0, 3, 1], 2))
+
+try {
+  let hours_arr: number[] = []
+  let target: number
+  for (let i = 2; i < process.argv.length; ++i) {
+    if (!isNaN(Number(process.argv[i]))) {
+      if (i === 2) {
+        target = Number(process.argv[i])
+      } else if (i > 2) {
+        hours_arr.push(Number(process.argv[i]))
+      }
+    } else {
+      throw new Error('arguments contained values which were not numbers')
+    }
+  }
+  console.log(calculateExercises(hours_arr, target))
+} catch (error: unknown) {
+  let errorMessage = 'An error occurred: '
+  if (error instanceof Error) {
+    errorMessage += error.message
+  }
+  console.log(errorMessage)
+}
+
+

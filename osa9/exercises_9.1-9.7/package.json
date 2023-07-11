@@ -2,13 +2,15 @@
   "name": "exercises_9.1-9.7",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
+  "main": "index.ts",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
     "ts-node": "ts-node",
-    "calculateBmi": "ts-node -- calculateBmi.ts",
-    "calculateExercises": "ts-node -- exerciseCalculator.ts"
+    "calculateBmi": "ts-node calculateBmi.ts",
+    "calculateExercises": "ts-node exerciseCalculator.ts"
   },
   "author": "",
-  "license": "ISC"
+  "license": "ISC",
+  "devDependencies": {
+    "@types/node": "^20.4.1"
+  }
 }
