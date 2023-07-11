@@ -11,8 +11,8 @@ interface Result {
 const calculateExercises = (hours: number[], target: number): Result => {
   const sum = hours.reduce((a, b) => a + b, 0)
   const average = sum / hours.length
-  let rating: number
-  let ratingDescription: string
+  let rating: number = 0
+  let ratingDescription: string = ''
   if (average >= target) {
     rating = 3
     ratingDescription = 'congratulations you met your target!'
@@ -37,7 +37,7 @@ const calculateExercises = (hours: number[], target: number): Result => {
 
 try {
   let hours_arr: number[] = []
-  let target: number
+  let target: number = 0
   for (let i = 2; i < process.argv.length; ++i) {
     if (!isNaN(Number(process.argv[i]))) {
       if (i === 2) {
