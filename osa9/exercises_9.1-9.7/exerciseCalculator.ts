@@ -26,7 +26,7 @@ const calculateExercises = (hours: number[], target: number): Result => {
   return {
     periodLength: hours.length,
     trainingDays: hours.filter(h => h !== 0).length,
-    success: average >= target ? true : false,
+    success: average >= target,
     rating: rating,
     ratingDescription: ratingDescription,
     target: target,
