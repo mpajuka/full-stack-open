@@ -18,3 +18,5 @@
   - [Link to course page](https://fullstackopen.com/en/part7)
 - [Part 8. GraphQL](https://github.com/mpajuka/full-stack-open-2023/tree/main/osa8)
   - [Link to course page](https://fullstackopen.com/en/part8)
+- [Part 9. TypeScript](https://github.com/mpajuka/full-stack-open-2023/tree/main/osa9/exercises_9.1-9.7)
+  - [Link to course page](https://fullstackopen.com/en/part9)
