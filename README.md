@@ -1,4 +1,4 @@
-# Full Stack open 2023
+# Full Stack open
 
 ## Topics
 
