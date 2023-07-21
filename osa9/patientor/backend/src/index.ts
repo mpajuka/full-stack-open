@@ -3,7 +3,7 @@ import cors from 'cors';
 import diagnoseRouter from './routes/diagnoseRouter';
 import patientRouter from './routes/patientRouter';
 const app = express();
-app.use(express());
+app.use(express.json());
 app.use(cors());
 
 const PORT = 3001;
