@@ -4,7 +4,6 @@ import { useEffect, useState } from "react";
 import { Patient } from "../../types";
 import FemaleIcon from '@mui/icons-material/Female';
 import MaleIcon from '@mui/icons-material/Male';
-import { Icon } from "@mui/material";
 
 const PatientView = () => {
     const id = useParams().id;

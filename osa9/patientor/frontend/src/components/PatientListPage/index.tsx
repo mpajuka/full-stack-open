@@ -8,7 +8,7 @@ import AddPatientModal from "../AddPatientModal";
 import HealthRatingBar from "../HealthRatingBar";
 
 import patientService from "../../services/patients";
-import { Link, useParams } from "react-router-dom";
+import { Link } from "react-router-dom";
 
 interface Props {
   patients : Patient[]
