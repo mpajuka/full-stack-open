@@ -20,7 +20,12 @@ const addPatient = (entry) => {
     patients_1.default.push(newPatientEntry);
     return newPatientEntry;
 };
+const getPatientById = (id) => {
+    const patient = patients_1.default.find(p => p.id === id);
+    return patient;
+};
 exports.default = {
     getPatients,
-    addPatient
+    addPatient,
+    getPatientById
 };
